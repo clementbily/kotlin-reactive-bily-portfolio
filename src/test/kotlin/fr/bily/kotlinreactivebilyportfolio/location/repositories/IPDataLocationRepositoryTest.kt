@@ -27,7 +27,7 @@ internal class IPDataLocationRepositoryTest {
     private lateinit var exchangeFunction: ExchangeFunction
 
     @Captor
-    private lateinit var  captor: ArgumentCaptor<ClientRequest>
+    private lateinit var captor: ArgumentCaptor<ClientRequest>
 
     private lateinit var builder: WebClient.Builder
 
@@ -40,17 +40,14 @@ internal class IPDataLocationRepositoryTest {
 
     @BeforeEach
     fun setup() {
-         mockResponse = mock(ClientResponse::class.java)
+        mockResponse = mock(ClientResponse::class.java)
         given(this.exchangeFunction.exchange(this.captor.capture())).willReturn(Mono.just(mockResponse))
         this.builder = WebClient.builder().baseUrl("/base").exchangeFunction(this.exchangeFunction)
     }
 
-
     @Test
     fun getCurrentUserLocation() {
-        val repository = IPDataLocationRepository(this.builder)
-
-
+        val repository = IPDataLocationRepository(this.builder, "http://weather-test.ca")
         given(mockResponse.bodyToMono(any<Class<IPLocation>>())).willReturn(Mono.just(randomIPLocation))
         val locationMono = repository.getCurrentUserLocation()
         StepVerifier.create(locationMono.log())

@@ -1,7 +1,6 @@
 package fr.bily.kotlinreactivebilyportfolio.location.data
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.annotation.JsonValue
 
 data class IPLocation(
         var query: String,

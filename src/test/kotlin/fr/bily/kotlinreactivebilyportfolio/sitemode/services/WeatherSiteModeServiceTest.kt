@@ -30,7 +30,7 @@ internal class WeatherSiteModeServiceTest {
     }
 
     @Test
-    fun testClearSiteMode() {
+    fun shouldReturnLightModeForDefaultClearWeather() {
         given(ipLocationRepositoryMock.getCurrentUserLocation()).willReturn(Mono.just(randomIPLocation))
         given(forecastRepositoryMock.getPointWeatherForecast(anyFloat(), anyFloat())).willReturn(Mono.just(defaultClearWeatherForecast))
         val service = WeatherSiteModeService(forecastRepositoryMock, ipLocationRepositoryMock)

@@ -14,6 +14,6 @@ import reactor.core.publisher.Mono
 class SiteModeController(val siteModeService: SiteModeService) {
     @GetMapping("")
     fun getSite(): Mono<PortfolioSiteMode> {
-        return siteModeService.computePortfolioSiteMode();
+        return siteModeService.computePortfolioSiteMode()
     }
 }

@@ -22,7 +22,7 @@ internal class WeatherMapForecastRepositoryTest {
     private lateinit var exchangeFunction: ExchangeFunction
 
     @Captor
-    private lateinit var  captor: ArgumentCaptor<ClientRequest>
+    private lateinit var captor: ArgumentCaptor<ClientRequest>
 
     private lateinit var builder: WebClient.Builder
 
@@ -39,11 +39,12 @@ internal class WeatherMapForecastRepositoryTest {
         given(this.exchangeFunction.exchange(this.captor.capture())).willReturn(Mono.just(mockResponse))
         this.builder = WebClient.builder().baseUrl("/base").exchangeFunction(this.exchangeFunction)
     }
+
     @Test
     fun getPointWeatherForecast() {
-        val repository = WeatherMapForecastRepository(this.builder)
-        given(mockResponse.bodyToMono(ArgumentMatchers.any<Class<WeatherForecast>>())).willReturn(Mono.just(defaultClearWeatherForecast))
-        val weatherForecastMono = repository.getPointWeatherForecast(1.0f,-2.0f)
+        val repository = WeatherMapForecastRepository(this.builder, "http://test-weather.ca", "secret")
+        given(mockResponse.bodyToMono(WeatherForecast::class.java)).willReturn(Mono.just(defaultClearWeatherForecast))
+        val weatherForecastMono = repository.getPointWeatherForecast(1.0f, -2.0f)
         StepVerifier.create(weatherForecastMono.log())
                 .expectNext(defaultClearWeatherForecast)
                 .expectComplete()

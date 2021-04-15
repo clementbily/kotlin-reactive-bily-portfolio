@@ -1,7 +1,6 @@
 package fr.bily.kotlinreactivebilyportfolio.weather.repositories
 
 import fr.bily.kotlinreactivebilyportfolio.weather.data.WeatherForecast
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Repository
 import org.springframework.web.reactive.function.client.WebClient

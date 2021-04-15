@@ -16,5 +16,5 @@ data class WeatherForecast(var weather: Array<Weather>) {
 
     override fun hashCode(): Int {
         return weather.contentHashCode()
-    };
+    }
 }
