@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.mockito.*
-import org.mockito.BDDMockito.given
 import org.springframework.web.reactive.function.client.ClientRequest
 import org.springframework.web.reactive.function.client.ClientResponse
 import org.springframework.web.reactive.function.client.ExchangeFunction
@@ -36,14 +35,14 @@ internal class WeatherMapForecastRepositoryTest {
     @BeforeEach
     fun setup() {
         mockResponse = Mockito.mock(ClientResponse::class.java)
-        given(this.exchangeFunction.exchange(this.captor.capture())).willReturn(Mono.just(mockResponse))
-        this.builder = WebClient.builder().baseUrl("/base").exchangeFunction(this.exchangeFunction)
+        Mockito.`when`(exchangeFunction.exchange(captor.capture())).thenReturn(Mono.just(mockResponse))
+        builder = WebClient.builder().baseUrl("/base").exchangeFunction(exchangeFunction)
     }
 
     @Test
     fun getPointWeatherForecast() {
-        val repository = WeatherMapForecastRepository(this.builder, "http://test-weather.ca", "secret")
-        given(mockResponse.bodyToMono(WeatherForecast::class.java)).willReturn(Mono.just(defaultClearWeatherForecast))
+        val repository = WeatherMapForecastRepository(builder, "http://test-weather.ca", "secret")
+        Mockito.`when`(mockResponse.bodyToMono(WeatherForecast::class.java)).thenReturn(Mono.just(defaultClearWeatherForecast))
         val weatherForecastMono = repository.getPointWeatherForecast(1.0f, -2.0f)
         StepVerifier.create(weatherForecastMono.log())
                 .expectNext(defaultClearWeatherForecast)

@@ -1,6 +1,6 @@
 package fr.bily.kotlinreactivebilyportfolio.location.data
 
-import java.util.*
+import java.util.UUID
 
 val randomIPLocation = IPLocation(timezone = UUID.randomUUID().toString(),
         asNumber = UUID.randomUUID().toString(),

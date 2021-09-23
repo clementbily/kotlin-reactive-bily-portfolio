@@ -1,5 +1,9 @@
 package fr.bily.kotlinreactivebilyportfolio.weather.data
 
+/**
+ * holds the weather conditions for a given forecast
+ * for example a forecast can be both dark and rainy or dark and cloudy
+ */
 data class WeatherForecast(var weather: Array<Weather>) {
     class Weather(var id: String, var main: String, var description: String, var icon: String)
 

@@ -7,12 +7,11 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.mockito.ArgumentCaptor
-import org.mockito.ArgumentMatchers.any
-import org.mockito.BDDMockito.given
 import org.mockito.Captor
 import org.mockito.Mock
-import org.mockito.Mockito.mock
+import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
+import org.mockito.ArgumentMatchers.any
 import org.springframework.web.reactive.function.client.ClientRequest
 import org.springframework.web.reactive.function.client.ClientResponse
 import org.springframework.web.reactive.function.client.ExchangeFunction
@@ -40,15 +39,15 @@ internal class IPDataLocationRepositoryTest {
 
     @BeforeEach
     fun setup() {
-        mockResponse = mock(ClientResponse::class.java)
-        given(this.exchangeFunction.exchange(this.captor.capture())).willReturn(Mono.just(mockResponse))
-        this.builder = WebClient.builder().baseUrl("/base").exchangeFunction(this.exchangeFunction)
+        mockResponse = Mockito.mock(ClientResponse::class.java)
+        Mockito.`when`(exchangeFunction.exchange(captor.capture())).thenReturn(Mono.just(mockResponse))
+        builder = WebClient.builder().baseUrl("/base").exchangeFunction(exchangeFunction)
     }
 
     @Test
     fun getCurrentUserLocation() {
-        val repository = IPDataLocationRepository(this.builder, "http://weather-test.ca")
-        given(mockResponse.bodyToMono(any<Class<IPLocation>>())).willReturn(Mono.just(randomIPLocation))
+        val repository = IPDataLocationRepository(builder, "http://weather-test.ca")
+        Mockito.`when`(mockResponse.bodyToMono(any<Class<IPLocation>>())).thenReturn(Mono.just(randomIPLocation))
         val locationMono = repository.getCurrentUserLocation()
         StepVerifier.create(locationMono.log())
                 .expectNext(randomIPLocation)

@@ -7,11 +7,11 @@ import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Mono
 
 @Repository
-class WeatherMapForecastRepository(private val webClientBuilder: WebClient.Builder,
-                                   @Value("\${weather.api.url}") private val apiUrl: String, @Value("\${weather.api.secret}") private val apiSecret: String) : WeatherForecastRepository {
+class WeatherMapForecastRepository(webClientBuilder: WebClient.Builder,
+                                   @Value("\${weather.api.url}") apiUrl: String, @Value("\${weather.api.secret}") private val apiSecret: String) : WeatherForecastRepository {
     private val webClient: WebClient = webClientBuilder.baseUrl("${apiUrl}/data/2.5").build()
     override fun getPointWeatherForecast(lon: Float, lat: Float): Mono<WeatherForecast> {
-        return this.webClient.get().uri { uriBuilder ->
+        return webClient.get().uri { uriBuilder ->
             uriBuilder.path("/weather")
                     .queryParam("appid", apiSecret)
                     .queryParam("lat", lat)

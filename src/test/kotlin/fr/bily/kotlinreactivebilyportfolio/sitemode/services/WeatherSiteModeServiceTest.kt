@@ -9,8 +9,8 @@ import fr.bily.kotlinreactivebilyportfolio.weather.repositories.WeatherForecastR
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import org.mockito.BDDMockito.*
 import org.mockito.Mock
+import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
@@ -31,8 +31,8 @@ internal class WeatherSiteModeServiceTest {
 
     @Test
     fun shouldReturnLightModeForDefaultClearWeather() {
-        given(ipLocationRepositoryMock.getCurrentUserLocation()).willReturn(Mono.just(randomIPLocation))
-        given(forecastRepositoryMock.getPointWeatherForecast(anyFloat(), anyFloat())).willReturn(Mono.just(defaultClearWeatherForecast))
+        Mockito.`when`(ipLocationRepositoryMock.getCurrentUserLocation()).thenReturn(Mono.just(randomIPLocation))
+        Mockito.`when`(forecastRepositoryMock.getPointWeatherForecast(Mockito.anyFloat(), Mockito.anyFloat())).thenReturn(Mono.just(defaultClearWeatherForecast))
         val service = WeatherSiteModeService(forecastRepositoryMock, ipLocationRepositoryMock)
         val siteModeMono = service.computePortfolioSiteMode() // act
         StepVerifier.create(siteModeMono.log())
@@ -40,11 +40,8 @@ internal class WeatherSiteModeServiceTest {
                 .expectComplete()
                 .verify()
         // we assert service call after mono emited value because mono acts as an asynchronous unit
-        then(ipLocationRepositoryMock)
-                .should()
-                .getCurrentUserLocation()
-        then(forecastRepositoryMock)
-                .should()
+        Mockito.verify(ipLocationRepositoryMock).getCurrentUserLocation();
+        Mockito.verify(forecastRepositoryMock)
                 .getPointWeatherForecast(randomIPLocation.lon, randomIPLocation.lat)
 
     }
