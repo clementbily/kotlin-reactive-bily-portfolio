@@ -18,6 +18,7 @@ val codeMappings = setOf(
 )
 
 @Service
+
 class WeatherSiteModeService(private val weatherRepository: WeatherForecastRepository, private val locationRepository: IPLocationRepository) : SiteModeService {
     override fun computePortfolioSiteMode(): Mono<PortfolioSiteMode> {
         return locationRepository.getCurrentUserLocation().flatMap { location ->
